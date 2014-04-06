@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/neo')
 # points.  The following "score" function will be used to calculate the
 # score of a single roll of the dice.
 #
-# A greed roll is scored as follows:
+  # A greed roll is scored as follows:
 #
 # * A set of three ones is 1000 points
 #
@@ -13,7 +13,7 @@ require File.expand_path(File.dirname(__FILE__) + '/neo')
 #
 # * A one (that is not part of a set of three) is worth 100 points.
 #
-# * A five (that is not part of a set of three) is worth 50 points.
+# ** A five (that is not part of a set of three) is worth 50 points.
 #
 # * Everything else is worth 0 points.
 #
@@ -31,6 +31,38 @@ require File.expand_path(File.dirname(__FILE__) + '/neo')
 
 def score(dice)
   # You need to write this method
+  return_value = 0
+  if (dice == 0) || (dice.size == 0)
+    return return_value
+  else
+    diceH = Hash.new(0)
+    dice.each {|x| diceH[x] += 1}
+    diceH.each {
+      |key, val|
+      if (val >= 3)
+        if ((key == 1) || (key == 5))
+          if (key == 1)
+            return_value = return_value + 1000 + ((val - 3) * 100)  
+          end
+          if (key == 5)
+            return_value = return_value + 500 + ((val - 3) * 50)
+          end
+        else
+          if (val == 3)
+            return_value += (100 * key)
+          end
+        end
+      else
+        if (key == 1)
+          return_value += (100 * val)
+        end
+        if (key == 5)
+          return_value += (50 * val)
+        end
+      end
+    }
+  end
+  return return_value
 end
 
 class AboutScoringProject < Neo::Koan
