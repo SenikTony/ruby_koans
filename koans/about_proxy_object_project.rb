@@ -12,13 +12,83 @@ require File.expand_path(File.dirname(__FILE__) + '/neo')
 # missing handler and any other supporting methods.  The specification
 # of the Proxy class is given in the AboutProxyObjectProject koan.
 
-class Proxy
+class Proxy  
   def initialize(target_object)
     @object = target_object
     # ADD MORE CODE HERE
+    @called = nil
+    @power_called_count = 0
+    @channel_called_count = 0
+    @on_called_count = 0
+    @messages = Array.new
   end
 
   # WRITE CODE HERE
+  def channel= (val)
+    @channel_called_count += 1
+    @messages << :channel=
+    @object.channel = val
+  end
+
+  def channel
+    @called = :channel
+    @object.channel
+  end
+
+  def power
+    @called = :power
+    @power_called_count += 1
+    @messages << :power
+    @object.power
+  end
+
+  def on?
+    @on_called_count += 1
+    @object.on?
+  end
+
+  def messages
+    @messages
+  end
+
+  def called?(val)
+    val == @called
+  end
+
+  def number_of_times_called(val)
+    @counter = 0
+    if (val == :power)
+      @counter = @power_called_count
+    end
+    if (val.to_sym == :channel=)
+      @counter = @channel_called_count
+    end
+    if (val.to_sym == :on?)
+      @counter = @on_called_count
+    end
+    return @counter
+  end
+
+  def upcase!
+    if (@object.is_a?(String))
+      @messages << :upcase!
+      @object.upcase!
+    end
+  end
+
+  def split
+    if (@object.is_a?(String))
+      @messages << :split
+      @object.split
+    end
+  end
+
+  private
+    @called
+    @power_called_count
+    @channel_called_count
+    @on_called_count
+    @messages
 end
 
 # The proxy object should pass the following Koan:
